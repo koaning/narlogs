@@ -5,7 +5,12 @@ import polars as pl
 import pandas as pd
 from contextlib import redirect_stdout
 from narlogs import print_step
+from mktestdocs import check_md_file
 
+# Note the use of `str`, makes for pretty output
+
+def test_readme():
+    check_md_file(fpath="README.md")
 
 dataframes = [
     pl.read_csv("chickweight.csv"),

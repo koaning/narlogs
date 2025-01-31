@@ -15,9 +15,9 @@ def callback(callback_fn: Callable[[Any], None]) -> Callable[[F], F]:
     def decorator(func: F) -> F:
         @wraps(func)
         def wrapper(*args, **kwargs):
-            result = func(*args, **kwargs)
+            result = nw.from_native(func(*args, **kwargs))
             callback_fn(result)
-            return result
+            return result.to_native()
         return wrapper
     return decorator
 
@@ -114,3 +114,8 @@ def print_step(
             print_fn(outputs)
 
     return wrapper
+
+__all__ = [
+    "print_step",
+    "callback",
+]

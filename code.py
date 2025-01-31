@@ -31,7 +31,8 @@ def _(callback, print_step):
         time.sleep(3)
         return dataf
         
-    read_csv("chickweight.csv", pd.read_csv, a=1).pipe(identity)
+    pl.read_csv("chickweight.csv").pipe(identity)
+    pd.read_csv("chickweight.csv").pipe(identity)
     return identity, pd, pl, print_sample, read_csv, time
 
 
