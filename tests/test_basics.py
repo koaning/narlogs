@@ -2,19 +2,23 @@ import pytest
 import io
 import sys
 import polars as pl 
+import pandas as pd
 from contextlib import redirect_stdout
 from narlogs import print_step
 
-df = pl.read_csv("chickweight.csv")
 
+dataframes = [
+    pl.read_csv("chickweight.csv"),
+    pd.read_csv("chickweight.csv"),
+]
 
 @print_step
 def identity(dataf, **kwargs):
     return dataf
 
 
-
-def test_identity():    
+@pytest.mark.parametrize("df", dataframes)
+def test_identity(df):    
     f = io.StringIO()
     with redirect_stdout(f):
         identity(df)
@@ -27,8 +31,9 @@ def test_identity():
     assert "dtypes" in out
 
 
+@pytest.mark.parametrize("df", dataframes)
 @pytest.mark.parametrize("names", ["a", "b", ["a", "b", "c"]])
-def test_identity_kwargs(names):    
+def test_identity_kwargs(df, names):    
     f = io.StringIO()
     with redirect_stdout(f):
         identity(df, **{n: 1 for n in names})
